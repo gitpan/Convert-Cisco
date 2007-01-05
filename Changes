@@ -3,3 +3,6 @@ Revision history for Convert-Cisco
 0.01    2007-01-04 22:00
         First version, released on an unsuspecting world.
 
+0.02    2007-01-05 23:00
+        Updated the perldoc. Warn users that the XML format is
+        subject to change.

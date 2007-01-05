@@ -19,13 +19,18 @@ Convert::Cisco - Module for converting Cisco billing records
 
 =head1 VERSION
 
-Version 0.01
+Version 0.02
 
 =cut
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 =head1 SYNOPSIS
+
+Convert Cisco billing record binary files. The format is available on the
+Cisco Website:
+
+ http://www.cisco.com/univercd/cc/td/doc/product/access/sc/rel9/billinf/r9chap1.htm
 
 Module used to convert Cisco billing records into XML
 
@@ -36,9 +41,17 @@ Module used to convert Cisco billing records into XML
 
 =head1 FUNCTIONS
 
+=cut
+
 #-------------------------------------------------------------
 
 =head2 new
+
+Constructor method. Currently expects no arguments
+
+     my $obj = Convert::Cisco->new();
+
+Returns a convertor object instance
 
 =cut
 
@@ -53,11 +66,12 @@ sub new {
 
 #-------------------------------------------------------------
 
-=head2 cdbTags
+# _cdbTags
+#
+# Returns the CDB record types
+#
 
-=cut
-
-sub cdbTags {
+sub _cdbTags {
    my ($self) = @_;
    get_logger->warn("CDBs not configured") unless exists $self->{config}{"CDB Records"};
    return keys %{$self->{config}{"CDB Records"}};
@@ -65,11 +79,12 @@ sub cdbTags {
 
 #-------------------------------------------------------------
 
-=head2 cdbName
+# _cdbName
+#
+# Returns the configured name for the CDB record
+#
 
-=cut
-
-sub cdbName {
+sub _cdbName {
    my ($self, $key) = @_;
    get_logger->warn("CDB not configured: ", $key) unless exists $self->{config}{"CDB Records"}{$key};
    return $self->{config}{"CDB Records"}{$key}{name};
@@ -77,11 +92,12 @@ sub cdbName {
 
 #-------------------------------------------------------------
 
-=head2 cdbElements
+# _cdbElements
+#
+# Returns the CDB configuration
+#
 
-=cut
-
-sub cdbElements {
+sub _cdbElements {
    my ($self, $key) = @_;
    get_logger->warn("CDB not configured: ", $key) unless exists $self->{config}{"CDB Records"}{$key};
    return sort @{$self->{config}{"CDB Records"}{$key}{elements}};
@@ -89,11 +105,12 @@ sub cdbElements {
 
 #-------------------------------------------------------------
 
-=head2 cdeName
+# _cdeName
+#
+# Returns the configured CDE name
+#
 
-=cut
-
-sub cdeName {
+sub _cdeName {
    my ($self, $key) = @_;
    get_logger->warn("CDE not configured: ", $key) unless exists $self->{config}{"CDE Records"}{$key};
    return $self->{config}{"CDE Records"}{$key}{name};
@@ -101,11 +118,12 @@ sub cdeName {
 
 #-------------------------------------------------------------
 
-=head2 cdeValue
+# _cdeValue
+#
+# Unpacks tge CDE record based on the configured specification
+#
 
-=cut
-
-sub cdeValue {
+sub _cdeValue {
    my ($self, $key, $value) = @_;
    my $log = get_logger;
    get_logger->warn("CDE not configured: ", $key) unless exists $self->{config}{"CDE Records"}{$key};
@@ -121,6 +139,25 @@ sub cdeValue {
 #-------------------------------------------------------------
 
 =head2 to_xml
+
+Converts a file into XML format. The current record format is:
+
+ <?xml version="1.0" encoding="UTF-8"?>
+ <?xml-stylesheet href="cdrs.xsl" type="text/xsl"?>
+ <cdrs>
+   <cdb tag="1090" name="Header" timestamp="2006-10-26T11:36:57" timestamp_10mins="2006-10-26T11:40:00">
+     <timepoint tag="4001" value="1161862617" />
+     <source tag="6000" value="TestLab" />
+     <version tag="6004" value="9.6(1)" />
+   </cdb>
+   <cdb tag="1110" name="EndOfCall" timestamp="2006-10-26T11:53:43" timestamp_10mins="2006-10-26T12:00:00">
+     <calling_party_category tag="3000" value="0a" />
+     ..
+     ..
+
+B<NOTE:>
+
+The XML format is subject to change and needs an associated XML DTD or Schema.
 
 =cut
 
@@ -165,27 +202,27 @@ sub to_xml {
       $log->debug("CDB Record:\n", { filter => \&Dump, value  => [$tag, \%cde] });
 
       ### Decode the record
-      if (defined $self->cdbName($tag)) {
+      if (defined $self->_cdbName($tag)) {
 	 my @values;
 
 	 ### 4001 holds the record epoch value
-	 my $timepoint = $self->cdeValue(4001, $cde{4001});
+	 my $timepoint = $self->_cdeValue(4001, $cde{4001});
 
 	 ### Insert the name of the CDB and the timestamp
 	 $writer->startTag("cdb",
 		 tag => $tag,
-		 name => $self->cdbName($tag),
+		 name => $self->_cdbName($tag),
 		 timestamp => DateTime->from_epoch(epoch => $timepoint)->datetime,
 		 timestamp_10mins => DateTime->from_epoch(epoch => nhimult(600, $timepoint))->datetime,
 	 );
 
-	 foreach my $element ( $self->cdbElements($tag) ) {
-	    $writer->emptyTag($self->cdeName($element), tag=>$element, value=>$self->cdeValue($element, $cde{$element}));
+	 foreach my $element ( $self->_cdbElements($tag) ) {
+	    $writer->emptyTag($self->_cdeName($element), tag=>$element, value=>$self->_cdeValue($element, $cde{$element}));
 	 }
 
 	 ### Read number of records from Footer record
 	 if ($tag == 1100) {
-	    $recordCount = $self->cdeValue(6003, $cde{6003});
+	    $recordCount = $self->_cdeValue(6003, $cde{6003});
 	 }
 
          ### End tag
