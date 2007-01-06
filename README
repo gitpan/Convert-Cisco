@@ -3,7 +3,7 @@ Convert-Cisco
 This is a pure perl module that can be used to convert Cisco billing
 records into XML.
 
-This is version 0.01 and should be considered alpha quality. The XML
+This is version 0.03 and should be considered alpha quality. The XML
 format is currently subject to change. The author does not recommend this
 module for production usage, yet.
 

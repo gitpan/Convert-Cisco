@@ -19,11 +19,11 @@ Convert::Cisco - Module for converting Cisco billing records
 
 =head1 VERSION
 
-Version 0.02
+Version 0.03
 
 =cut
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 =head1 SYNOPSIS
 
@@ -34,10 +34,10 @@ Cisco Website:
 
 Module used to convert Cisco billing records into XML
 
-    use Convert::Cisco;
+ use Convert::Cisco;
 
-    my $obj = Convert::Cisco->new();
-    $obj->to_xml("test.bin", "test.xml");
+ my $obj = Convert::Cisco->new(stylesheet=>"cisco.xsl");
+ $obj->to_xml("test.bin", "test.xml");
 
 =head1 FUNCTIONS
 
@@ -47,34 +47,47 @@ Module used to convert Cisco billing records into XML
 
 =head2 new
 
-Constructor method. Currently expects no arguments
+Constructor method, has the following optional parameters:
 
-     my $obj = Convert::Cisco->new();
+=over
 
-Returns a convertor object instance
+=item stylesheet
+
+Adds a xml-stylesheet processing instruction to the top of all converted XML files
+
+ <?xml-stylesheet href="cisco.xsl" type="text/xsl"?>
+
+=item config
+
+Billing record configuration data expressed in YAML format. This option is normally
+only used by the tests.
+
+=back
 
 =cut
 
 sub new {
    my $class = shift;
-   my $self = bless {}, $class;
+   my (%args) = @_;
+   my $self = bless {stylesheet=>undef, config=>undef, %args}, $class;
 
-   $self->{config} = Load(join("\n", <Convert::Cisco::DATA>));
+   ### Load record configuration
+   if (defined $self->{config}) {
+      $self->{_config} = Load($self->{config});
+   }
+   else {
+      $self->{_config} = Load(join("\n", <Convert::Cisco::DATA>));
+   }
+
+   ### Default configuration
+   unless (exists $self->{_config}{"CDE Records"}{4001}) {
+      $self->{_config}{"CDE Records"}{4001} = {name=>"timepoint", spec=>"N"};
+   }
+   unless (exists $self->{_config}{"CDE Records"}{6003}) {
+      $self->{_config}{"CDE Records"}{6003} = {name=>"record_count", spec=>"N"};
+   }
 
    return $self;
-}
-
-#-------------------------------------------------------------
-
-# _cdbTags
-#
-# Returns the CDB record types
-#
-
-sub _cdbTags {
-   my ($self) = @_;
-   get_logger->warn("CDBs not configured") unless exists $self->{config}{"CDB Records"};
-   return keys %{$self->{config}{"CDB Records"}};
 }
 
 #-------------------------------------------------------------
@@ -86,21 +99,15 @@ sub _cdbTags {
 
 sub _cdbName {
    my ($self, $key) = @_;
-   get_logger->warn("CDB not configured: ", $key) unless exists $self->{config}{"CDB Records"}{$key};
-   return $self->{config}{"CDB Records"}{$key}{name};
-}
+   my $log = get_logger;
 
-#-------------------------------------------------------------
-
-# _cdbElements
-#
-# Returns the CDB configuration
-#
-
-sub _cdbElements {
-   my ($self, $key) = @_;
-   get_logger->warn("CDB not configured: ", $key) unless exists $self->{config}{"CDB Records"}{$key};
-   return sort @{$self->{config}{"CDB Records"}{$key}{elements}};
+   if (exists $self->{_config}{"CDB Names"}{$key}) {
+      return $self->{_config}{"CDB Names"}{$key};
+   }
+   else {
+      $log->warn("CDB not configured: ", $key);
+      return "UNKNOWN"
+   }
 }
 
 #-------------------------------------------------------------
@@ -112,8 +119,15 @@ sub _cdbElements {
 
 sub _cdeName {
    my ($self, $key) = @_;
-   get_logger->warn("CDE not configured: ", $key) unless exists $self->{config}{"CDE Records"}{$key};
-   return $self->{config}{"CDE Records"}{$key}{name};
+   my $log = get_logger;
+
+   if (exists $self->{_config}{"CDE Records"}{$key}) {
+      return $self->{_config}{"CDE Records"}{$key}{name};
+   }
+   else {
+      $log->warn("CDE not configured: ", $key);
+      return "UNKNOWN"
+   }
 }
 
 #-------------------------------------------------------------
@@ -126,13 +140,32 @@ sub _cdeName {
 sub _cdeValue {
    my ($self, $key, $value) = @_;
    my $log = get_logger;
-   get_logger->warn("CDE not configured: ", $key) unless exists $self->{config}{"CDE Records"}{$key};
 
-   if (ref($self->{config}{"CDE Records"}{$key}{spec})) {
-      return join("-", unpack(join(" ", @{$self->{config}{"CDE Records"}{$key}{spec}}), $value));
+   if (exists $self->{_config}{"CDE Records"}{$key}) {
+      if (ref($self->{_config}{"CDE Records"}{$key}{spec})) {
+         return join("-", unpack(join(" ", @{$self->{_config}{"CDE Records"}{$key}{spec}}), $value));
+      }
+      else {
+         return unpack($self->{_config}{"CDE Records"}{$key}{spec}, $value)
+      }
    }
    else {
-      return unpack($self->{config}{"CDE Records"}{$key}{spec}, $value)
+      return unpack("H*", $value)
+   }
+}
+
+#-------------------------------------------------------------
+
+# _stylesheetDecl
+#
+# Write XSL stylesheet declaration
+#
+
+sub _stylesheetDecl {
+   my ($self, $writer) = @_;
+
+   if (defined $self->{stylesheet}) {
+      $writer->pi('xml-stylesheet', sprintf('href="%s" type="%s"', $self->{stylesheet}, "text/xsl"));
    }
 }
 
@@ -143,17 +176,18 @@ sub _cdeValue {
 Converts a file into XML format. The current record format is:
 
  <?xml version="1.0" encoding="UTF-8"?>
- <?xml-stylesheet href="cdrs.xsl" type="text/xsl"?>
  <cdrs>
-   <cdb tag="1090" name="Header" timestamp="2006-10-26T11:36:57" timestamp_10mins="2006-10-26T11:40:00">
-     <timepoint tag="4001" value="1161862617" />
-     <source tag="6000" value="TestLab" />
-     <version tag="6004" value="9.6(1)" />
-   </cdb>
-   <cdb tag="1110" name="EndOfCall" timestamp="2006-10-26T11:53:43" timestamp_10mins="2006-10-26T12:00:00">
-     <calling_party_category tag="3000" value="0a" />
-     ..
-     ..
+  ..
+  ..
+  <cdb tag="1110" name="EndOfCall" timestamp="2006-10-26T11:53:43" timestamp_10mins="2006-10-26T12:00:00">
+    <cde name="calling_party_category" tag="3000">0a</cde>
+    <cde name="user_service_info" tag="3001">8090a3</cde>
+    <cde name="calling_number_nature_of_address" tag="3003">02</cde>
+	..
+	..
+  </cdb>
+  ..
+  ..
 
 B<NOTE:>
 
@@ -178,8 +212,9 @@ sub to_xml {
    ### XML Writer object
    my $writer = XML::Writer->new(OUTPUT => $file, DATA_MODE=>1, DATA_INDENT=>2);
 
+   ### Write the start of the file
    $writer->xmlDecl("UTF-8");
-   $writer->pi('xml-stylesheet', 'href="cdrs.xsl" type="text/xsl"');
+   $self->_stylesheetDecl($writer);
    $writer->startTag("cdrs");
 
    ### Convert the file into CSV format
@@ -201,36 +236,28 @@ sub to_xml {
       ### Dump the CDB record
       $log->debug("CDB Record:\n", { filter => \&Dump, value  => [$tag, \%cde] });
 
-      ### Decode the record
-      if (defined $self->_cdbName($tag)) {
-	 my @values;
+      ### 4001 holds the record epoch value
+      my $timepoint = $self->_cdeValue(4001, $cde{4001});
 
-	 ### 4001 holds the record epoch value
-	 my $timepoint = $self->_cdeValue(4001, $cde{4001});
+      ### Insert the name of the CDB and the timestamp
+      $writer->startTag("cdb",
+         tag => $tag,
+         name => $self->_cdbName($tag),
+         timestamp => DateTime->from_epoch(epoch => $timepoint)->datetime,
+         timestamp_10mins => DateTime->from_epoch(epoch => nhimult(600, $timepoint))->datetime,
+      );
 
-	 ### Insert the name of the CDB and the timestamp
-	 $writer->startTag("cdb",
-		 tag => $tag,
-		 name => $self->_cdbName($tag),
-		 timestamp => DateTime->from_epoch(epoch => $timepoint)->datetime,
-		 timestamp_10mins => DateTime->from_epoch(epoch => nhimult(600, $timepoint))->datetime,
-	 );
-
-	 foreach my $element ( $self->_cdbElements($tag) ) {
-	    $writer->emptyTag($self->_cdeName($element), tag=>$element, value=>$self->_cdeValue($element, $cde{$element}));
-	 }
-
-	 ### Read number of records from Footer record
-	 if ($tag == 1100) {
-	    $recordCount = $self->_cdeValue(6003, $cde{6003});
-	 }
-
-         ### End tag
-	 $writer->endTag("cdb");
+      foreach my $element ( sort keys %cde ) {
+         $writer->dataElement("cde", $self->_cdeValue($element, $cde{$element}), tag=>$element, name=>$self->_cdeName($element));
       }
-      else {
-         $log->logcroak("Unknown CDB record: ", $tag);
+
+      ### Read number of records from Footer record
+      if ($tag == 1100) {
+         $recordCount = $self->_cdeValue(6003, $cde{6003});
       }
+
+      ### End tag
+      $writer->endTag("cdb");
    }
 
    ### Audit check
@@ -309,225 +336,15 @@ __DATA__
 #
 #===========================================================================
 
-#
-# Each CDB record consists of a sequence of CDE elements
-#
-CDB Records:
-  1090:
-    name: Header
-    elements:
-      - 4001
-      - 6000
-      - 6004
-  1100:
-    name: Footer
-    elements:
-      - 4001
-      - 6000
-      - 6004
-      - 6003
-  1010: 
-    name: Answer
-    elements:
-      - 3000
-      - 3001
-      - 3003
-      - 3005
-      - 3007
-      - 3008
-      - 3009
-      - 3011
-      - 4000
-      - 4001
-      - 4002
-      - 4008
-      - 4009
-      - 4010
-      - 4011
-      - 4012
-      - 4014
-      - 4015
-      - 4016
-      - 4019
-      - 4028
-      - 4029
-      - 4034
-      - 4035
-      - 4036
-      - 4037
-      - 4038
-      - 4046
-      - 4047
-      - 4052
-      - 4066
-      - 4067
-      - 4068
-      - 4069
-      - 4070
-      - 4071
-      - 4072
-      - 4073
-      - 4081
-      - 4084
-      - 4087
-      - 4088
-      - 4090
-      - 4091
-      - 4095
-      - 4096
-      - 4098
-      - 4100
-      - 4101
-      - 4102
-      - 4103
-      - 4106
-      - 4107
-      - 4108
-      - 4109
-      - 5000
-  1030:
-    name: Abort
-    elements:
-      - 3000
-      - 3001
-      - 3003
-      - 3005
-      - 3007
-      - 3008
-      - 3009
-      - 3011
-      - 4000
-      - 4001
-      - 4002
-      - 4008
-      - 4009
-      - 4010
-      - 4011
-      - 4012
-      - 4014
-      - 4015
-      - 4016
-      - 4019
-      - 4028
-      - 4029
-      - 4034
-      - 4035
-      - 4036
-      - 4037
-      - 4038
-      - 4046
-      - 4047
-      - 4052
-      - 4066
-      - 4067
-      - 4068
-      - 4069
-      - 4070
-      - 4071
-      - 4072
-      - 4073
-      - 4081
-      - 4084
-      - 4087
-      - 4088
-      - 4090
-      - 4091
-      - 4095
-      - 4096
-      - 4098
-      - 4100
-      - 4101
-      - 4102
-      - 4103
-      - 4106
-      - 4107
-      - 4108
-      - 4109
-      - 5000
-  1040:
-    name: Release
-    elements:
-      - 3008
-      - 4000
-      - 4001
-      - 4002
-      - 4019
-      - 4028
-      - 4030
-      - 4046
-      - 4047
-      - 4081
-      - 4087
-      - 4088
-      - 4090
-      - 4091
-      - 4098
-      - 4106
-      - 4107
-      - 4108
-      - 4109
-      - 4213
-      - 4214
-      - 5000
-      - 6005
-  1060:
-    name: Continue
-    elements:
-      - 3008
-      - 4000
-      - 4001
-      - 4002
-      - 4019
-      - 4028
-      - 4030
-      - 4046
-      - 4047
-      - 4081
-      - 4087
-      - 4088
-      - 4090
-      - 4091
-      - 4098
-      - 4106
-      - 4107
-      - 4108
-      - 4109
-      - 4213
-      - 4214
-      - 5000
-      - 6005
-  1110:
-    name: EndOfCall
-    elements:
-      - 3000
-      - 3001
-      - 3003
-      - 3005
-      - 3007
-      - 3008
-      - 3018
-      - 4000
-      - 4001
-      - 4002
-      - 4008
-      - 4009
-      - 4010
-      - 4011
-      - 4012
-      - 4014
-      - 4028
-      - 4034
-      - 4035
-      - 4068
-      - 4081
-      - 4084
-      - 4090
-      - 4091
-      - 4100
-      - 4106
-      - 4108
-      - 4217
-      - 5000
+# Name of each Call Data Block (CDB)
+CDB Names:
+  1090: Header
+  1100: Footer
+  1010: Answer 
+  1030: Abort
+  1040: Release
+  1060: Continue
+  1110: EndOfCall
 
 #
 # Each CDE element has a different record format specfication
@@ -693,6 +510,9 @@ CDE Records:
   4081:
     name: fax_call
     spec: C
+  4083:
+    name: charge_indicator
+    spec: C
   4084:
     name: outgoing_calling_party_number
     spec: Z*
@@ -778,6 +598,12 @@ CDE Records:
   6000:
     name: source
     spec: Z*
+  6001:
+    name: file_start_time
+    spec: N
+  6002:
+    name: file_end_time
+    spec: N
   6003:
     name: record_count
     spec: N

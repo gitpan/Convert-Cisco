@@ -92,7 +92,12 @@ sub assert_log {
 
    $self->{Test_log} = [split /;/, Log::Log4perl::Appender::TestBuffer->by_name("Test")->buffer] unless $self->{Test_log};
 
-   $self->assert_str_equals($msg, shift @{$self->{Test_log}});
+   if (defined $msg) {
+      $self->assert_str_equals($msg, shift @{$self->{Test_log}});
+   }
+   else {
+      $self->assert_null(shift @{$self->{Test_log}});
+   }
 }
 
 #----------------------------------------

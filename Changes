@@ -6,3 +6,8 @@ Revision history for Convert-Cisco
 0.02    2007-01-05 23:00
         Updated the perldoc. Warn users that the XML format is
         subject to change.
+
+0.03    2007-01-06 22:00
+        XML format has changed to make it more generic
+        Refactored the to_xml method allowing it to function when Call
+        records are not properly configured.
