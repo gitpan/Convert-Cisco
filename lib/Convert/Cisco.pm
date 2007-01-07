@@ -11,7 +11,6 @@ use Log::Log4perl qw(get_logger);
 use YAML::Syck qw(Dump Load);
 use DateTime;
 use XML::Writer;
-use Math::Round qw(nhimult);
 
 =head1 NAME
 
@@ -19,11 +18,11 @@ Convert::Cisco - Module for converting Cisco billing records
 
 =head1 VERSION
 
-Version 0.03
+Version 0.04
 
 =cut
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 =head1 SYNOPSIS
 
@@ -60,7 +59,7 @@ Adds a xml-stylesheet processing instruction to the top of all converted XML fil
 =item config
 
 Billing record configuration data expressed in YAML format. This option is normally
-only used by the tests.
+only used by the tests because it over-rides the modules field configuration.
 
 =back
 
@@ -80,9 +79,6 @@ sub new {
    }
 
    ### Default configuration
-   unless (exists $self->{_config}{"CDE Records"}{4001}) {
-      $self->{_config}{"CDE Records"}{4001} = {name=>"timepoint", spec=>"N"};
-   }
    unless (exists $self->{_config}{"CDE Records"}{6003}) {
       $self->{_config}{"CDE Records"}{6003} = {name=>"record_count", spec=>"N"};
    }
@@ -92,12 +88,12 @@ sub new {
 
 #-------------------------------------------------------------
 
-# _cdbName
+# _decodeCDB
 #
 # Returns the configured name for the CDB record
 #
 
-sub _cdbName {
+sub _decodeCDB {
    my ($self, $key) = @_;
    my $log = get_logger;
 
@@ -112,46 +108,45 @@ sub _cdbName {
 
 #-------------------------------------------------------------
 
-# _cdeName
+# _decodeCDE
 #
-# Returns the configured CDE name
+# Unpacks the CDE record based on the configured specification
 #
 
-sub _cdeName {
-   my ($self, $key) = @_;
+sub _decodeCDE {
+   my ($self, $key, $value) = @_;
    my $log = get_logger;
+   my $decodeValue;
+   my $decodeName;
+   my $decodeValueUnformatted;
 
    if (exists $self->{_config}{"CDE Records"}{$key}) {
-      return $self->{_config}{"CDE Records"}{$key}{name};
+
+      $decodeName = $self->{_config}{"CDE Records"}{$key}{name};
+      my $spec    = $self->{_config}{"CDE Records"}{$key}{spec};
+      my $format  = $self->{_config}{"CDE Records"}{$key}{format};
+
+	  ### Handling for multi-part records
+      if (ref($spec) eq "ARRAY")  {
+         $decodeValue = join("-", unpack(join(" ", @{$spec}), $value));
+      }
+      else {
+         $decodeValue = unpack($spec, $value);
+      }
+
+	  ### Optional output formatting
+	  if (defined $format and $format eq "epoch2datetime") {
+         $decodeValueUnformatted = $decodeValue;
+         $decodeValue = DateTime->from_epoch(epoch => $decodeValueUnformatted)->datetime;
+	  }
    }
    else {
       $log->warn("CDE not configured: ", $key);
-      return "UNKNOWN"
+	  $decodeName  = "UNKNOWN";
+      $decodeValue = unpack("H*", $value);
    }
-}
 
-#-------------------------------------------------------------
-
-# _cdeValue
-#
-# Unpacks tge CDE record based on the configured specification
-#
-
-sub _cdeValue {
-   my ($self, $key, $value) = @_;
-   my $log = get_logger;
-
-   if (exists $self->{_config}{"CDE Records"}{$key}) {
-      if (ref($self->{_config}{"CDE Records"}{$key}{spec})) {
-         return join("-", unpack(join(" ", @{$self->{_config}{"CDE Records"}{$key}{spec}}), $value));
-      }
-      else {
-         return unpack($self->{_config}{"CDE Records"}{$key}{spec}, $value)
-      }
-   }
-   else {
-      return unpack("H*", $value)
-   }
+   return ($decodeValue, $decodeName, $decodeValueUnformatted);
 }
 
 #-------------------------------------------------------------
@@ -179,7 +174,7 @@ Converts a file into XML format. The current record format is:
  <cdrs>
   ..
   ..
-  <cdb tag="1110" name="EndOfCall" timestamp="2006-10-26T11:53:43" timestamp_10mins="2006-10-26T12:00:00">
+  <cdb tag="1110" name="EndOfCall">
     <cde name="calling_party_category" tag="3000">0a</cde>
     <cde name="user_service_info" tag="3001">8090a3</cde>
     <cde name="calling_number_nature_of_address" tag="3003">02</cde>
@@ -226,7 +221,7 @@ sub to_xml {
       $i++;
 
       ### Read the Call Data Block
-      my ($tag, $length) = unpack("n2", $bin);
+      my ($cdbTag, $length) = unpack("n2", $bin);
       $infile->read($bin, $length);
 
       ### Decode the Call Data Elements
@@ -234,30 +229,29 @@ sub to_xml {
       my %cde  = unpack("(n n/a*)*", $bin);
 
       ### Dump the CDB record
-      $log->debug("CDB Record:\n", { filter => \&Dump, value  => [$tag, \%cde] });
+      $log->debug("CDB Record:\n", { filter => \&Dump, value  => [$cdbTag, \%cde] });
 
-      ### 4001 holds the record epoch value
-      my $timepoint = $self->_cdeValue(4001, $cde{4001});
+      ### Start the "cdb" block
+      $writer->startTag("cdb", tag => $cdbTag, name => $self->_decodeCDB($cdbTag));
 
-      ### Insert the name of the CDB and the timestamp
-      $writer->startTag("cdb",
-         tag => $tag,
-         name => $self->_cdbName($tag),
-         timestamp => DateTime->from_epoch(epoch => $timepoint)->datetime,
-         timestamp_10mins => DateTime->from_epoch(epoch => nhimult(600, $timepoint))->datetime,
-      );
+      foreach my $cdeTag ( sort keys %cde ) {
+         my ($value, $name, $raw) = $self->_decodeCDE($cdeTag, $cde{$cdeTag});
 
-      foreach my $element ( sort keys %cde ) {
-         $writer->dataElement("cde", $self->_cdeValue($element, $cde{$element}), tag=>$element, name=>$self->_cdeName($element));
+		 if (defined $raw) {
+            $writer->dataElement("cde", $value, tag=>$cdeTag, name=>$name, raw=>$raw);
+		 }
+		 else {
+            $writer->dataElement("cde", $value, tag=>$cdeTag, name=>$name);
+		 }
       }
+
+      ### End "cdb" block
+      $writer->endTag("cdb");
 
       ### Read number of records from Footer record
-      if ($tag == 1100) {
-         $recordCount = $self->_cdeValue(6003, $cde{6003});
+      if ($cdbTag == 1100) {
+         ($recordCount) = $self->_decodeCDE(6003, $cde{6003});
       }
-
-      ### End tag
-      $writer->endTag("cdb");
    }
 
    ### Audit check
@@ -395,6 +389,7 @@ CDE Records:
   4001:
     name: timepoint
     spec: N
+    format: epoch2datetime
   4002:
     name: call_reference_id
     spec: H*
@@ -601,9 +596,11 @@ CDE Records:
   6001:
     name: file_start_time
     spec: N
+    format: epoch2datetime
   6002:
     name: file_end_time
     spec: N
+    format: epoch2datetime
   6003:
     name: record_count
     spec: N

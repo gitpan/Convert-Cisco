@@ -1,6 +1,6 @@
 ---
 name: Convert-Cisco
-version: 0.03
+version: 0.04
 author:
   - "Mark O'Connor <marko@cpan.org>"
 abstract: Module for converting Cisco billing records
@@ -10,7 +10,6 @@ resources:
 build_requires:
   DateTime: 0
   Log::Log4perl: 0
-  Math::Round: 0
   Test::More: 0
   Test::Unit: 0
   XML::Writer: 0
@@ -18,7 +17,7 @@ build_requires:
 provides:
   Convert::Cisco:
     file: lib/Convert/Cisco.pm
-    version: 0.03
+    version: 0.04
 generated_by: Module::Build version 0.2801
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.2.html

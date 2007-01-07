@@ -70,12 +70,17 @@ sub test_noconfig {
 
    ### Assertions
    $self->assert_file_contents_identical("test.xml", "t/data/cdr_20061026133657_105573.noconfig.xml");
+
+   # Header warnings
    $self->assert_log("WARN> CDB not configured: 1090");
    $self->assert_log("WARN> CDE not configured: 4000");
+   $self->assert_log("WARN> CDE not configured: 4001");
    $self->assert_log("WARN> CDE not configured: 4002");
    $self->assert_log("WARN> CDE not configured: 6000");
    $self->assert_log("WARN> CDE not configured: 6001");
    $self->assert_log("WARN> CDE not configured: 6004");
+
+   # Record 1 warnings
    $self->assert_log("WARN> CDB not configured: 1110");
    $self->assert_log("WARN> CDE not configured: 3000");
    # etc, etc

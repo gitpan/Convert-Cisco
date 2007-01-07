@@ -12,7 +12,6 @@ my $builder = Module::Build->new(
 		'YAML::Syck' => 0,
 		'DateTime' => 0,
 		'XML::Writer' => 0,
-		'Math::Round' => 0,
 		'Test::Unit' => 0,
         'Test::More' => 0,
     },

@@ -11,3 +11,7 @@ Revision history for Convert-Cisco
         XML format has changed to make it more generic
         Refactored the to_xml method allowing it to function when Call
         records are not properly configured.
+
+0.04    2007-01-07 12:30
+        Minor changes to XML format. Added the ability to format datetime
+        fields in the output XML
