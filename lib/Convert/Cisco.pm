@@ -18,11 +18,11 @@ Convert::Cisco - Module for converting Cisco billing records
 
 =head1 VERSION
 
-Version 0.04
+Version 0.05
 
 =cut
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 =head1 SYNOPSIS
 
@@ -135,9 +135,19 @@ sub _decodeCDE {
       }
 
 	  ### Optional output formatting
-	  if (defined $format and $format eq "epoch2datetime") {
+	  if (defined $format) {
          $decodeValueUnformatted = $decodeValue;
-         $decodeValue = DateTime->from_epoch(epoch => $decodeValueUnformatted)->datetime;
+
+	     if ($format eq "epoch2datetime") {
+            $decodeValue = DateTime->from_epoch(epoch => $decodeValueUnformatted)->datetime;
+	     }
+		 elsif ($format eq "compoundEpoch2datetime") {
+			my @timeComponents = split("-", $decodeValueUnformatted);
+            $decodeValue = DateTime->from_epoch(epoch => $timeComponents[0])->datetime.".".$timeComponents[1];
+	     }
+		 else {
+			 $log->warn("Unsupported format configured for CDE: $key");
+		 }
 	  }
    }
    else {
@@ -543,41 +553,49 @@ CDE Records:
     spec: 
        - N
        - n
+    format: compoundEpoch2datetime
   4101:
     name: iam_timepoint_sent
     spec: 
        - N
        - n
+    format: compoundEpoch2datetime
   4102:
     name: acm_timepoint_received
     spec: 
        - N
        - n
+    format: compoundEpoch2datetime
   4103:
     name: acm_timepoint_sent
     spec: 
        - N
        - n
+    format: compoundEpoch2datetime
   4106:
     name: first_rel_timepoint_ms
     spec: 
        - N
        - n
+    format: compoundEpoch2datetime
   4107:
     name: second_rel_timepoint_ms
     spec: 
        - N
        - n
+    format: compoundEpoch2datetime
   4108:
     name: rlc_timepoint_received
     spec: 
        - N
        - n
+    format: compoundEpoch2datetime
   4109:
     name: rlc_timepoint_sent
     spec: 
        - N
        - n
+    format: compoundEpoch2datetime
   4213:
     name: meter_pulse_received
     spec: N

@@ -34,9 +34,9 @@
     <cde name="outgoing_calling_party_number" tag="4084">25</cde>
     <cde name="reservation_request_accepted" tag="4090">0</cde>
     <cde name="reservation_request_error_count" tag="4091">0</cde>
-    <cde name="iam_timepoint_received" tag="4100">1161863623-454</cde>
-    <cde name="first_rel_timepoint_ms" tag="4106">1161863623-469</cde>
-    <cde name="rlc_timepoint_received" tag="4108">1161863623-680</cde>
+    <cde name="iam_timepoint_received" tag="4100" raw="1161863623-454">2006-10-26T11:53:43.454</cde>
+    <cde name="first_rel_timepoint_ms" tag="4106" raw="1161863623-469">2006-10-26T11:53:43.469</cde>
+    <cde name="rlc_timepoint_received" tag="4108" raw="1161863623-680">2006-10-26T11:53:43.680</cde>
     <cde name="short_call_indicator" tag="4217">1</cde>
     <cde name="unique_call_correlator_id" tag="5000">cb73d89165b111db81df0003ba683767</cde>
   </cdb>
@@ -65,9 +65,9 @@
     <cde name="outgoing_calling_party_number" tag="4084">32</cde>
     <cde name="reservation_request_accepted" tag="4090">0</cde>
     <cde name="reservation_request_error_count" tag="4091">0</cde>
-    <cde name="iam_timepoint_received" tag="4100">1161863655-214</cde>
-    <cde name="first_rel_timepoint_ms" tag="4106">1161863655-216</cde>
-    <cde name="rlc_timepoint_received" tag="4108">1161863663-200</cde>
+    <cde name="iam_timepoint_received" tag="4100" raw="1161863655-214">2006-10-26T11:54:15.214</cde>
+    <cde name="first_rel_timepoint_ms" tag="4106" raw="1161863655-216">2006-10-26T11:54:15.216</cde>
+    <cde name="rlc_timepoint_received" tag="4108" raw="1161863663-200">2006-10-26T11:54:23.200</cde>
     <cde name="short_call_indicator" tag="4217">1</cde>
     <cde name="unique_call_correlator_id" tag="5000">de620cc265b111db81e30003ba683767</cde>
   </cdb>
@@ -108,14 +108,14 @@
     <cde name="reservation_request_error_count" tag="4091">0</cde>
     <cde name="route_list_name" tag="4095">rtlist-hiq9200</cde>
     <cde name="route_name" tag="4096">rt-hiq9200</cde>
-    <cde name="iam_timepoint_received" tag="4100">1161863886-934</cde>
-    <cde name="iam_timepoint_sent" tag="4101">1161863887-284</cde>
-    <cde name="acm_timepoint_received" tag="4102">1161863891-471</cde>
-    <cde name="acm_timepoint_sent" tag="4103">1161863891-471</cde>
-    <cde name="first_rel_timepoint_ms" tag="4106">1161863894-941</cde>
-    <cde name="second_rel_timepoint_ms" tag="4107">1161863894-941</cde>
-    <cde name="rlc_timepoint_received" tag="4108">1161863895-210</cde>
-    <cde name="rlc_timepoint_sent" tag="4109">1161863894-972</cde>
+    <cde name="iam_timepoint_received" tag="4100" raw="1161863886-934">2006-10-26T11:58:06.934</cde>
+    <cde name="iam_timepoint_sent" tag="4101" raw="1161863887-284">2006-10-26T11:58:07.284</cde>
+    <cde name="acm_timepoint_received" tag="4102" raw="1161863891-471">2006-10-26T11:58:11.471</cde>
+    <cde name="acm_timepoint_sent" tag="4103" raw="1161863891-471">2006-10-26T11:58:11.471</cde>
+    <cde name="first_rel_timepoint_ms" tag="4106" raw="1161863894-941">2006-10-26T11:58:14.941</cde>
+    <cde name="second_rel_timepoint_ms" tag="4107" raw="1161863894-941">2006-10-26T11:58:14.941</cde>
+    <cde name="rlc_timepoint_received" tag="4108" raw="1161863895-210">2006-10-26T11:58:15.210</cde>
+    <cde name="rlc_timepoint_sent" tag="4109" raw="1161863894-972">2006-10-26T11:58:14.972</cde>
     <cde name="meter_pulse_received" tag="4213">0</cde>
     <cde name="meter_pulse_sent" tag="4214">0</cde>
     <cde name="short_call_indicator" tag="4217">1</cde>
@@ -147,9 +147,9 @@
     <cde name="outgoing_calling_party_number" tag="4084">32</cde>
     <cde name="reservation_request_accepted" tag="4090">0</cde>
     <cde name="reservation_request_error_count" tag="4091">0</cde>
-    <cde name="iam_timepoint_received" tag="4100">1161863915-594</cde>
-    <cde name="first_rel_timepoint_ms" tag="4106">1161863915-596</cde>
-    <cde name="rlc_timepoint_received" tag="4108">1161863915-720</cde>
+    <cde name="iam_timepoint_received" tag="4100" raw="1161863915-594">2006-10-26T11:58:35.594</cde>
+    <cde name="first_rel_timepoint_ms" tag="4106" raw="1161863915-596">2006-10-26T11:58:35.596</cde>
+    <cde name="rlc_timepoint_received" tag="4108" raw="1161863915-720">2006-10-26T11:58:35.720</cde>
     <cde name="short_call_indicator" tag="4217">1</cde>
     <cde name="unique_call_correlator_id" tag="5000">7994e96b65b211db81ff0003ba683767</cde>
   </cdb>
@@ -180,9 +180,9 @@
     <cde name="reservation_request_error_count" tag="4091">0</cde>
     <cde name="route_list_name" tag="4095">lvgotf004-rl5011</cde>
     <cde name="route_name" tag="4096">lvgotf004-tr5011</cde>
-    <cde name="iam_timepoint_received" tag="4100">1161864283-765</cde>
-    <cde name="first_rel_timepoint_ms" tag="4106">1161864283-773</cde>
-    <cde name="rlc_timepoint_received" tag="4108">1161864284-20</cde>
+    <cde name="iam_timepoint_received" tag="4100" raw="1161864283-765">2006-10-26T12:04:43.765</cde>
+    <cde name="first_rel_timepoint_ms" tag="4106" raw="1161864283-773">2006-10-26T12:04:43.773</cde>
+    <cde name="rlc_timepoint_received" tag="4108" raw="1161864284-20">2006-10-26T12:04:44.20</cde>
     <cde name="meter_pulse_received" tag="4213">0</cde>
     <cde name="meter_pulse_sent" tag="4214">0</cde>
     <cde name="short_call_indicator" tag="4217">1</cde>
@@ -215,9 +215,9 @@
     <cde name="reservation_request_error_count" tag="4091">0</cde>
     <cde name="route_list_name" tag="4095">lvgotf004-rl5011</cde>
     <cde name="route_name" tag="4096">lvgotf004-tr5011</cde>
-    <cde name="iam_timepoint_received" tag="4100">1161864285-55</cde>
-    <cde name="first_rel_timepoint_ms" tag="4106">1161864285-57</cde>
-    <cde name="rlc_timepoint_received" tag="4108">1161864285-310</cde>
+    <cde name="iam_timepoint_received" tag="4100" raw="1161864285-55">2006-10-26T12:04:45.55</cde>
+    <cde name="first_rel_timepoint_ms" tag="4106" raw="1161864285-57">2006-10-26T12:04:45.57</cde>
+    <cde name="rlc_timepoint_received" tag="4108" raw="1161864285-310">2006-10-26T12:04:45.310</cde>
     <cde name="meter_pulse_received" tag="4213">0</cde>
     <cde name="meter_pulse_sent" tag="4214">0</cde>
     <cde name="short_call_indicator" tag="4217">1</cde>
@@ -250,9 +250,9 @@
     <cde name="reservation_request_error_count" tag="4091">0</cde>
     <cde name="route_list_name" tag="4095">lvgotf004-rl5011</cde>
     <cde name="route_name" tag="4096">lvgotf004-tr5011</cde>
-    <cde name="iam_timepoint_received" tag="4100">1161864286-345</cde>
-    <cde name="first_rel_timepoint_ms" tag="4106">1161864286-347</cde>
-    <cde name="rlc_timepoint_received" tag="4108">1161864286-590</cde>
+    <cde name="iam_timepoint_received" tag="4100" raw="1161864286-345">2006-10-26T12:04:46.345</cde>
+    <cde name="first_rel_timepoint_ms" tag="4106" raw="1161864286-347">2006-10-26T12:04:46.347</cde>
+    <cde name="rlc_timepoint_received" tag="4108" raw="1161864286-590">2006-10-26T12:04:46.590</cde>
     <cde name="meter_pulse_received" tag="4213">0</cde>
     <cde name="meter_pulse_sent" tag="4214">0</cde>
     <cde name="short_call_indicator" tag="4217">1</cde>
@@ -285,9 +285,9 @@
     <cde name="reservation_request_error_count" tag="4091">0</cde>
     <cde name="route_list_name" tag="4095">lvgotf004-rl5011</cde>
     <cde name="route_name" tag="4096">lvgotf004-tr5011</cde>
-    <cde name="iam_timepoint_received" tag="4100">1161864303-534</cde>
-    <cde name="first_rel_timepoint_ms" tag="4106">1161864303-537</cde>
-    <cde name="rlc_timepoint_received" tag="4108">1161864303-800</cde>
+    <cde name="iam_timepoint_received" tag="4100" raw="1161864303-534">2006-10-26T12:05:03.534</cde>
+    <cde name="first_rel_timepoint_ms" tag="4106" raw="1161864303-537">2006-10-26T12:05:03.537</cde>
+    <cde name="rlc_timepoint_received" tag="4108" raw="1161864303-800">2006-10-26T12:05:03.800</cde>
     <cde name="meter_pulse_received" tag="4213">0</cde>
     <cde name="meter_pulse_sent" tag="4214">0</cde>
     <cde name="short_call_indicator" tag="4217">1</cde>
@@ -320,9 +320,9 @@
     <cde name="reservation_request_error_count" tag="4091">0</cde>
     <cde name="route_list_name" tag="4095">lvgotf004-rl5011</cde>
     <cde name="route_name" tag="4096">lvgotf004-tr5011</cde>
-    <cde name="iam_timepoint_received" tag="4100">1161864304-825</cde>
-    <cde name="first_rel_timepoint_ms" tag="4106">1161864304-827</cde>
-    <cde name="rlc_timepoint_received" tag="4108">1161864305-80</cde>
+    <cde name="iam_timepoint_received" tag="4100" raw="1161864304-825">2006-10-26T12:05:04.825</cde>
+    <cde name="first_rel_timepoint_ms" tag="4106" raw="1161864304-827">2006-10-26T12:05:04.827</cde>
+    <cde name="rlc_timepoint_received" tag="4108" raw="1161864305-80">2006-10-26T12:05:05.80</cde>
     <cde name="meter_pulse_received" tag="4213">0</cde>
     <cde name="meter_pulse_sent" tag="4214">0</cde>
     <cde name="short_call_indicator" tag="4217">1</cde>
@@ -355,9 +355,9 @@
     <cde name="reservation_request_error_count" tag="4091">0</cde>
     <cde name="route_list_name" tag="4095">lvgotf004-rl5011</cde>
     <cde name="route_name" tag="4096">lvgotf004-tr5011</cde>
-    <cde name="iam_timepoint_received" tag="4100">1161864306-75</cde>
-    <cde name="first_rel_timepoint_ms" tag="4106">1161864306-77</cde>
-    <cde name="rlc_timepoint_received" tag="4108">1161864306-330</cde>
+    <cde name="iam_timepoint_received" tag="4100" raw="1161864306-75">2006-10-26T12:05:06.75</cde>
+    <cde name="first_rel_timepoint_ms" tag="4106" raw="1161864306-77">2006-10-26T12:05:06.77</cde>
+    <cde name="rlc_timepoint_received" tag="4108" raw="1161864306-330">2006-10-26T12:05:06.330</cde>
     <cde name="meter_pulse_received" tag="4213">0</cde>
     <cde name="meter_pulse_sent" tag="4214">0</cde>
     <cde name="short_call_indicator" tag="4217">1</cde>
@@ -390,9 +390,9 @@
     <cde name="reservation_request_error_count" tag="4091">0</cde>
     <cde name="route_list_name" tag="4095">lvgotf004-rl5011</cde>
     <cde name="route_name" tag="4096">lvgotf004-tr5011</cde>
-    <cde name="iam_timepoint_received" tag="4100">1161864343-445</cde>
-    <cde name="first_rel_timepoint_ms" tag="4106">1161864343-447</cde>
-    <cde name="rlc_timepoint_received" tag="4108">1161864343-701</cde>
+    <cde name="iam_timepoint_received" tag="4100" raw="1161864343-445">2006-10-26T12:05:43.445</cde>
+    <cde name="first_rel_timepoint_ms" tag="4106" raw="1161864343-447">2006-10-26T12:05:43.447</cde>
+    <cde name="rlc_timepoint_received" tag="4108" raw="1161864343-701">2006-10-26T12:05:43.701</cde>
     <cde name="meter_pulse_received" tag="4213">0</cde>
     <cde name="meter_pulse_sent" tag="4214">0</cde>
     <cde name="short_call_indicator" tag="4217">1</cde>
@@ -425,9 +425,9 @@
     <cde name="reservation_request_error_count" tag="4091">0</cde>
     <cde name="route_list_name" tag="4095">lvgotf004-rl5011</cde>
     <cde name="route_name" tag="4096">lvgotf004-tr5011</cde>
-    <cde name="iam_timepoint_received" tag="4100">1161864344-755</cde>
-    <cde name="first_rel_timepoint_ms" tag="4106">1161864344-757</cde>
-    <cde name="rlc_timepoint_received" tag="4108">1161864345-12</cde>
+    <cde name="iam_timepoint_received" tag="4100" raw="1161864344-755">2006-10-26T12:05:44.755</cde>
+    <cde name="first_rel_timepoint_ms" tag="4106" raw="1161864344-757">2006-10-26T12:05:44.757</cde>
+    <cde name="rlc_timepoint_received" tag="4108" raw="1161864345-12">2006-10-26T12:05:45.12</cde>
     <cde name="meter_pulse_received" tag="4213">0</cde>
     <cde name="meter_pulse_sent" tag="4214">0</cde>
     <cde name="short_call_indicator" tag="4217">1</cde>
@@ -460,9 +460,9 @@
     <cde name="reservation_request_error_count" tag="4091">0</cde>
     <cde name="route_list_name" tag="4095">lvgotf004-rl5011</cde>
     <cde name="route_name" tag="4096">lvgotf004-tr5011</cde>
-    <cde name="iam_timepoint_received" tag="4100">1161864345-935</cde>
-    <cde name="first_rel_timepoint_ms" tag="4106">1161864345-937</cde>
-    <cde name="rlc_timepoint_received" tag="4108">1161864346-190</cde>
+    <cde name="iam_timepoint_received" tag="4100" raw="1161864345-935">2006-10-26T12:05:45.935</cde>
+    <cde name="first_rel_timepoint_ms" tag="4106" raw="1161864345-937">2006-10-26T12:05:45.937</cde>
+    <cde name="rlc_timepoint_received" tag="4108" raw="1161864346-190">2006-10-26T12:05:46.190</cde>
     <cde name="meter_pulse_received" tag="4213">0</cde>
     <cde name="meter_pulse_sent" tag="4214">0</cde>
     <cde name="short_call_indicator" tag="4217">1</cde>
@@ -495,9 +495,9 @@
     <cde name="reservation_request_error_count" tag="4091">0</cde>
     <cde name="route_list_name" tag="4095">lvgotf004-rl5011</cde>
     <cde name="route_name" tag="4096">lvgotf004-tr5011</cde>
-    <cde name="iam_timepoint_received" tag="4100">1161864347-905</cde>
-    <cde name="first_rel_timepoint_ms" tag="4106">1161864347-907</cde>
-    <cde name="rlc_timepoint_received" tag="4108">1161864348-170</cde>
+    <cde name="iam_timepoint_received" tag="4100" raw="1161864347-905">2006-10-26T12:05:47.905</cde>
+    <cde name="first_rel_timepoint_ms" tag="4106" raw="1161864347-907">2006-10-26T12:05:47.907</cde>
+    <cde name="rlc_timepoint_received" tag="4108" raw="1161864348-170">2006-10-26T12:05:48.170</cde>
     <cde name="meter_pulse_received" tag="4213">0</cde>
     <cde name="meter_pulse_sent" tag="4214">0</cde>
     <cde name="short_call_indicator" tag="4217">1</cde>
@@ -530,9 +530,9 @@
     <cde name="reservation_request_error_count" tag="4091">0</cde>
     <cde name="route_list_name" tag="4095">lvgotf004-rl5011</cde>
     <cde name="route_name" tag="4096">lvgotf004-tr5011</cde>
-    <cde name="iam_timepoint_received" tag="4100">1161864349-194</cde>
-    <cde name="first_rel_timepoint_ms" tag="4106">1161864349-197</cde>
-    <cde name="rlc_timepoint_received" tag="4108">1161864349-510</cde>
+    <cde name="iam_timepoint_received" tag="4100" raw="1161864349-194">2006-10-26T12:05:49.194</cde>
+    <cde name="first_rel_timepoint_ms" tag="4106" raw="1161864349-197">2006-10-26T12:05:49.197</cde>
+    <cde name="rlc_timepoint_received" tag="4108" raw="1161864349-510">2006-10-26T12:05:49.510</cde>
     <cde name="meter_pulse_received" tag="4213">0</cde>
     <cde name="meter_pulse_sent" tag="4214">0</cde>
     <cde name="short_call_indicator" tag="4217">1</cde>
@@ -565,9 +565,9 @@
     <cde name="reservation_request_error_count" tag="4091">0</cde>
     <cde name="route_list_name" tag="4095">lvgotf004-rl5011</cde>
     <cde name="route_name" tag="4096">lvgotf004-tr5011</cde>
-    <cde name="iam_timepoint_received" tag="4100">1161864350-505</cde>
-    <cde name="first_rel_timepoint_ms" tag="4106">1161864350-507</cde>
-    <cde name="rlc_timepoint_received" tag="4108">1161864350-780</cde>
+    <cde name="iam_timepoint_received" tag="4100" raw="1161864350-505">2006-10-26T12:05:50.505</cde>
+    <cde name="first_rel_timepoint_ms" tag="4106" raw="1161864350-507">2006-10-26T12:05:50.507</cde>
+    <cde name="rlc_timepoint_received" tag="4108" raw="1161864350-780">2006-10-26T12:05:50.780</cde>
     <cde name="meter_pulse_received" tag="4213">0</cde>
     <cde name="meter_pulse_sent" tag="4214">0</cde>
     <cde name="short_call_indicator" tag="4217">1</cde>
@@ -600,9 +600,9 @@
     <cde name="reservation_request_error_count" tag="4091">0</cde>
     <cde name="route_list_name" tag="4095">lvgotf004-rl5011</cde>
     <cde name="route_name" tag="4096">lvgotf004-tr5011</cde>
-    <cde name="iam_timepoint_received" tag="4100">1161864352-555</cde>
-    <cde name="first_rel_timepoint_ms" tag="4106">1161864352-557</cde>
-    <cde name="rlc_timepoint_received" tag="4108">1161864352-800</cde>
+    <cde name="iam_timepoint_received" tag="4100" raw="1161864352-555">2006-10-26T12:05:52.555</cde>
+    <cde name="first_rel_timepoint_ms" tag="4106" raw="1161864352-557">2006-10-26T12:05:52.557</cde>
+    <cde name="rlc_timepoint_received" tag="4108" raw="1161864352-800">2006-10-26T12:05:52.800</cde>
     <cde name="meter_pulse_received" tag="4213">0</cde>
     <cde name="meter_pulse_sent" tag="4214">0</cde>
     <cde name="short_call_indicator" tag="4217">1</cde>
@@ -635,9 +635,9 @@
     <cde name="reservation_request_error_count" tag="4091">0</cde>
     <cde name="route_list_name" tag="4095">lvgotf004-rl5011</cde>
     <cde name="route_name" tag="4096">lvgotf004-tr5011</cde>
-    <cde name="iam_timepoint_received" tag="4100">1161864353-844</cde>
-    <cde name="first_rel_timepoint_ms" tag="4106">1161864353-847</cde>
-    <cde name="rlc_timepoint_received" tag="4108">1161864354-100</cde>
+    <cde name="iam_timepoint_received" tag="4100" raw="1161864353-844">2006-10-26T12:05:53.844</cde>
+    <cde name="first_rel_timepoint_ms" tag="4106" raw="1161864353-847">2006-10-26T12:05:53.847</cde>
+    <cde name="rlc_timepoint_received" tag="4108" raw="1161864354-100">2006-10-26T12:05:54.100</cde>
     <cde name="meter_pulse_received" tag="4213">0</cde>
     <cde name="meter_pulse_sent" tag="4214">0</cde>
     <cde name="short_call_indicator" tag="4217">1</cde>
@@ -670,9 +670,9 @@
     <cde name="reservation_request_error_count" tag="4091">0</cde>
     <cde name="route_list_name" tag="4095">lvgotf004-rl5011</cde>
     <cde name="route_name" tag="4096">lvgotf004-tr5011</cde>
-    <cde name="iam_timepoint_received" tag="4100">1161864355-44</cde>
-    <cde name="first_rel_timepoint_ms" tag="4106">1161864355-47</cde>
-    <cde name="rlc_timepoint_received" tag="4108">1161864355-300</cde>
+    <cde name="iam_timepoint_received" tag="4100" raw="1161864355-44">2006-10-26T12:05:55.44</cde>
+    <cde name="first_rel_timepoint_ms" tag="4106" raw="1161864355-47">2006-10-26T12:05:55.47</cde>
+    <cde name="rlc_timepoint_received" tag="4108" raw="1161864355-300">2006-10-26T12:05:55.300</cde>
     <cde name="meter_pulse_received" tag="4213">0</cde>
     <cde name="meter_pulse_sent" tag="4214">0</cde>
     <cde name="short_call_indicator" tag="4217">1</cde>

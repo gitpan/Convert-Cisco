@@ -15,3 +15,6 @@ Revision history for Convert-Cisco
 0.04    2007-01-07 12:30
         Minor changes to XML format. Added the ability to format datetime
         fields in the output XML
+
+0.05    2007-01-16 21:30
+	Now converts compound timepoint fields containing milliseconds
