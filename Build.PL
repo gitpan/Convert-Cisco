@@ -8,12 +8,12 @@ my $builder = Module::Build->new(
     dist_author         => 'Mark O\'Connor <marko@cpan.org>',
     dist_version_from   => 'lib/Convert/Cisco.pm',
     build_requires => {
-		'Log::Log4perl' => 0,
-		'YAML::Syck' => 0,
-		'DateTime' => 0,
-		'XML::Writer' => 0,
-		'Test::Unit' => 0,
-        'Test::More' => 0,
+		'Module::Build' => 0.2801,
+		'Log::Log4perl' => 1.04,
+		'YAML' => 0.62,
+		'DateTime' => 0.3,
+		'XML::Writer' => 0.601,
+		'Test::Unit' => 0.25,
     },
     add_to_cleanup      => [ 'Convert-Cisco-*' ],
 );

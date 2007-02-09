@@ -8,7 +8,7 @@ use strict;
 use FileHandle;
 use File::Basename;
 use Log::Log4perl qw(get_logger);
-use YAML::Syck qw(Dump Load);
+use YAML qw(Dump Load);
 use DateTime;
 use XML::Writer;
 
@@ -18,11 +18,11 @@ Convert::Cisco - Module for converting Cisco billing records
 
 =head1 VERSION
 
-Version 0.05
+Version 0.06
 
 =cut
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 =head1 SYNOPSIS
 
